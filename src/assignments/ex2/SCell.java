@@ -14,8 +14,7 @@ public class SCell implements Cell {
     private String line;
     private int type;
     private CellType CellType;
-    // Add your code here
-
+    private int order;
     public SCell(String s) {
         setData(s);
     }
@@ -55,6 +54,17 @@ public class SCell implements Cell {
         setType(Ex2Utils.TEXT);
     }
 
+    private boolean isValidFormula(String formula) {
+        if (formula == null || formula.trim().isEmpty()) {
+            return false;
+        }
+
+        // בדיקה בסיסית של תקינות הנוסחה
+        // צריך להרחיב את זה בהמשך לבדיקה מקיפה יותר
+        return formula.matches("[A-Z]\\d+|\\d+(\\.\\d+)?|[-+*/()\\d\\s]+");
+    }
+
+
 
     private boolean isNumber(String str) {
         try {
@@ -82,7 +92,6 @@ public class SCell implements Cell {
 
     @Override
     public void setOrder(int t) {
-        // Add your code here
-
+        this.order = t;
     }
 }
