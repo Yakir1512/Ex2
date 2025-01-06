@@ -27,20 +27,13 @@ public class SCell implements Cell {
     //@Override
     @Override
     public String toString() {
+
         return getData();
     }
 
     @Override
     public void setData(String s) {
         this.line = s;
-        if (s == null || s.trim().isEmpty()) {
-            setType(Ex2Utils.TEXT);
-            return;
-        }
-        if (isNumber(s)) {
-            setType(Ex2Utils.NUMBER);
-            return;
-        }
 
         if (s.startsWith("=")) {
             if (isValidFormula(s.substring(1))) {
@@ -51,6 +44,16 @@ public class SCell implements Cell {
             return;
         }
 
+        if (isNumber(s)) {
+            setType(Ex2Utils.NUMBER);
+            return;
+        }
+
+
+        if (s == null || s.trim().isEmpty()) {
+            setType(Ex2Utils.TEXT);
+            return;
+        }
         setType(Ex2Utils.TEXT);
     }
 
@@ -59,11 +62,38 @@ public class SCell implements Cell {
             return false;
         }
 
+        if (!checkBrackets(formula)) {
+            return false;
+        }
+
+        if (!opertorCheck(formula))
+            return false;
         // בדיקה בסיסית של תקינות הנוסחה
         // צריך להרחיב את זה בהמשך לבדיקה מקיפה יותר
         return formula.matches("[A-Z]\\d+|\\d+(\\.\\d+)?|[-+*/()\\d\\s]+");
     }
 
+    private static boolean checkBrackets(String expression) {
+        int count = 0;
+        for (char c : expression.toCharArray()) {
+            if (c == '(') count++;
+            if (c == ')') count--;
+            if (count < 0) return false;  // יותר סוגריים סוגרים מפותחים
+        }
+        return count == 0;
+    }
+
+    private static boolean opertorCheck(String expression){
+        int i = 1;
+        for (char c: expression.toCharArray()) {
+            if (c=='+'||c=='-' && expression.charAt(i) != '(') return false;
+            if (c=='*'||c=='/' && expression.charAt(i) != '(') return false;
+            if (c == ')' && expression.charAt(i)!='*' || expression.charAt(i)!='/') return false;
+            if (c == ')' && expression.charAt(i)!='-' || expression.charAt(i)!='+') return false;
+            i++;
+        }
+        return true;
+    }
 
 
     private boolean isNumber(String str) {
@@ -86,7 +116,7 @@ public class SCell implements Cell {
     }
 
     @Override
-    public void setType(int t) {
+    public void setType(int t ) {
        this.type = t;
     }
 
@@ -94,4 +124,5 @@ public class SCell implements Cell {
     public void setOrder(int t) {
         this.order = t;
     }
+
 }

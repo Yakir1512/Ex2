@@ -29,7 +29,7 @@ public interface Cell {
      * Changes the type of this Cell {TEXT,NUMBER, FORM, ERR_CYCLE_FORM, ERR_WRONG_FORM}
      * @param t an int type value as defines in Ex2Utils.
      */
-    public void setType(int t);
+    public void setType(int t );
     /**
      * Computes the natural order of this entry (cell) in case of a number or a String =0, else 1+ the max of all dependent cells.
      * @return an integer representing the "number of rounds" needed to compute this cell (using an iterative approach)..

@@ -1,5 +1,7 @@
 package assignments.ex2;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.LinkedList;
 // Add your documentation below:
 
 public class Ex2Sheet implements Sheet {
@@ -44,7 +46,7 @@ public class Ex2Sheet implements Sheet {
     public int width() {
         return table.length;
     }
-0
+
 
     @Override
     public int height() {
@@ -69,38 +71,20 @@ public class Ex2Sheet implements Sheet {
     @Override
     public boolean isIn(int xx, int yy) {
         boolean ans = xx>=0 && yy>=0;
-        if(xx< table.length&&yy< table[0].length)
-        return ans;
+        if(xx< table.length&&yy< table[0].length) {
+            return ans;
+        }
 
+        return ans;
     }
 
     @Override
     public int[][] depth() {
-        int[][] ans = new int[width()][height()];
-        int[][] depth(Sheet s) {
-            int[][] ans = new int[w][h];
-            init each cell in ans to  -1;
-            int depth = 0, count = 0, max = w*h;
-            boolean flagC = true;
-            while(count <max && flagC) {
-                flagC = false;
-                for(int x = 0;;x<w;x++) {
-                    for(int y = 0;y<h;y++) {
-                        if(canBeCompudedNow(x,y)) { // DIY
-                            ans[x][y] = depth;
-                            counter+=1;
-                            flagC=true;
-                        } // if
-                    } // for yt
-                }  // for x
-                depth+=1;
-            } while
-            return ans;
-        }
+        int[][] arr = new int[20] [20];
+            return arr ;
 
 
-            // ///////////////////
-        return ans;
+
     }
 
     @Override
@@ -121,9 +105,82 @@ public class Ex2Sheet implements Sheet {
     public String eval(int x, int y) {
         String ans = null;
         if(get(x,y)!=null) {ans = get(x,y).toString();}
-        // Add your code here
+        ans = Integer.toString(calculate(table[x][y].getData()));
 
         /////////////////////
         return ans;
+    }
+
+    public static int calculate(String str) {
+        int ans = 0, arr = 0;
+        String nstr = null;
+        if(!str.contains("*")&&!str.contains("-")&&!str.contains("+")&&!str.contains("/"))
+            return Integer.parseInt(str);
+
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            int barCount = 0;
+
+            if (c == '(') barCount++;
+            if (c == ')') barCount--;
+
+            if (str.startsWith("(") && str.endsWith(")"))
+                return calculate(str.substring(1, str.length() - 1));
+
+
+            if (barCount == 0) {
+                if (c == '+' || c == '-') {
+                    int left = calculate(str.substring(0, i));
+                    int right = calculate(str.substring(i + 1));
+                    return c == '+' ? left + right : left - right;
+                }
+            }
         }
+
+        for (int i = str.length() - 1; i >= 0; i--) {
+            char c = str.charAt(i);
+            int barCount = 0;
+
+            if (c == ')') barCount++;
+            if (c == '(') barCount--;
+
+            // אם אנחנו מחוץ לסוגריים, בודקים אופרטורים
+            if (barCount == 0) {
+                if (c == '*' || c == '/') {
+                    int left = calculate(str.substring(0, i));
+                    int right = calculate(str.substring(i + 1));
+                    return c == '*' ? left * right : left / right;
+                }
+            }
+        }
+
+        if (str.matches("\\d+")) {
+            return Integer.parseInt(str);
+        }
+
+
+//        for(int i=0; str.length()>=i; i++){
+//            int tempIndx = i+1;
+//            if (str.charAt(i)=='(') {
+//                while (str.charAt(i) != ')')
+//                    i++;
+//                nstr=str.substring(tempIndx,i);
+//                return calculate(str);
+//            }
+//
+//            if (str.charAt(i)=='*')
+//                nstr=Integer.toString(Integer.parseInt(str.substring(tempIndx,i))*calculate(str.substring(i+1)));
+//            if (str.charAt(i)=='-')
+//                nstr=Integer.toString(Integer.parseInt(str.substring(tempIndx,i))-calculate(str.substring(i+1)));
+//            if (str.charAt(i)=='+')
+//                nstr=Integer.toString(Integer.parseInt(str.substring(tempIndx,i))+calculate(str.substring(i+1)));
+//            if (str.charAt(i)=='/')
+//                nstr=Integer.toString(Integer.parseInt(str.substring(tempIndx,i))/calculate(str.substring(i+1)));
+//
+//        }
+//
+//        return Integer.parseInt(nstr);
+//    }
+        return 1;
+    }
 }
