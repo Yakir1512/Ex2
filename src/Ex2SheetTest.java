@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class Ex2SheetTest {
     @Test
     void value(){
-        String s = "1+(1*2)";
-        int v = Ex2Sheet.calculate(s);
-        assertEquals(3, v, "Formula is calculated good");
+        String s = "1000-1";
+        String v = Ex2Sheet.eval(s);
+        assertEquals(999, v, "Formula is calculated good");
 
 
     }

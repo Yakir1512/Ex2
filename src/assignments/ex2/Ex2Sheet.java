@@ -2,7 +2,7 @@ package assignments.ex2;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.LinkedList;
-// Add your documentation below:
+
 
 public class Ex2Sheet implements Sheet {
     private Cell[][] table;
@@ -62,6 +62,7 @@ public class Ex2Sheet implements Sheet {
     }
     @Override
     public void eval() {
+
         int[][] dd = depth();
 
         //nna
@@ -80,7 +81,7 @@ public class Ex2Sheet implements Sheet {
 
     @Override
     public int[][] depth() {
-        int[][] arr = new int[20] [20];
+        int[][] arr = new int[2] [2];
             return arr ;
 
 
@@ -104,18 +105,19 @@ public class Ex2Sheet implements Sheet {
     @Override
     public String eval(int x, int y) {
         String ans = null;
-        if(get(x,y)!=null) {ans = get(x,y).toString();}
-        ans = Integer.toString(calculate(table[x][y].getData()));
+        if(get(x,y)!=null) {
+            ans = get(x,y).toString();}
+        ans = eval(table[x][y].getData());
 
         /////////////////////
         return ans;
     }
 
-    public static int calculate(String str) {
+    public static String eval(String str) {
         int ans = 0, arr = 0;
         String nstr = null;
         if(!str.contains("*")&&!str.contains("-")&&!str.contains("+")&&!str.contains("/"))
-            return Integer.parseInt(str);
+            return str;
 
         for (int i = 0; i < str.length(); i++) {
             char c = str.charAt(i);
@@ -125,16 +127,17 @@ public class Ex2Sheet implements Sheet {
             if (c == ')') barCount--;
 
             if (str.startsWith("(") && str.endsWith(")"))
-                return calculate(str.substring(1, str.length() - 1));
+                return eval(str.substring(1, str.length() - 1));
 
 
             if (barCount == 0) {
                 if (c == '+' || c == '-') {
-                    int left = calculate(str.substring(0, i));
-                    int right = calculate(str.substring(i + 1));
-                    return c == '+' ? left + right : left - right;
+                    int left = Integer.parseInt(eval(str.substring(0, i)));
+                    int right = Integer.parseInt(eval(str.substring(i + 1)));
+                    return Integer.toString(c == '+' ? left + right : left - right);
                 }
             }
+
         }
 
         for (int i = str.length() - 1; i >= 0; i--) {
@@ -147,15 +150,16 @@ public class Ex2Sheet implements Sheet {
             // אם אנחנו מחוץ לסוגריים, בודקים אופרטורים
             if (barCount == 0) {
                 if (c == '*' || c == '/') {
-                    int left = calculate(str.substring(0, i));
-                    int right = calculate(str.substring(i + 1));
-                    return c == '*' ? left * right : left / right;
+                    int left = Integer.parseInt(eval(str.substring(0, i)));
+                    int right = Integer.parseInt(eval(str.substring(i + 1)));
+                    return Integer.toString(c == '*' ? left * right : left / right);
                 }
             }
+
         }
 
         if (str.matches("\\d+")) {
-            return Integer.parseInt(str);
+            return str;
         }
 
 
@@ -181,6 +185,6 @@ public class Ex2Sheet implements Sheet {
 //
 //        return Integer.parseInt(nstr);
 //    }
-        return 1;
+        return null;
     }
 }

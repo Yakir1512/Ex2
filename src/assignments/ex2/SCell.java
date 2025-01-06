@@ -15,6 +15,7 @@ public class SCell implements Cell {
     private int type;
     private CellType CellType;
     private int order;
+
     public SCell(String s) {
         setData(s);
     }
@@ -38,18 +39,17 @@ public class SCell implements Cell {
         if (s.startsWith("=")) {
             if (isValidFormula(s.substring(1))) {
                 setType(Ex2Utils.FORM);
+                setData(Ex2Sheet.eval(s));
             } else {
+                setData("ERR_FORM_FORMAT");
                 setType(Ex2Utils.ERR_FORM_FORMAT);
             }
             return;
         }
-
         if (isNumber(s)) {
             setType(Ex2Utils.NUMBER);
             return;
         }
-
-
         if (s == null || s.trim().isEmpty()) {
             setType(Ex2Utils.TEXT);
             return;
@@ -86,10 +86,11 @@ public class SCell implements Cell {
     private static boolean opertorCheck(String expression){
         int i = 1;
         for (char c: expression.toCharArray()) {
-            if (c=='+'||c=='-' && expression.charAt(i) != '(') return false;
-            if (c=='*'||c=='/' && expression.charAt(i) != '(') return false;
-            if (c == ')' && expression.charAt(i)!='*' || expression.charAt(i)!='/') return false;
-            if (c == ')' && expression.charAt(i)!='-' || expression.charAt(i)!='+') return false;
+
+            if ((c!='+'||c!='-') && i<expression.length()&& expression.charAt(i) == '(') return false;
+            if ((c!='*'||c!='/')&&i<expression.length() && expression.charAt(i) == '(') return false;
+            if (c == ')' && (expression.charAt(i)!='*' || expression.charAt(i)!='/')) return false;
+            if (c == ')' && (expression.charAt(i)!='-' || expression.charAt(i)!='+')) return false;
             i++;
         }
         return true;
