@@ -39,7 +39,7 @@ public class SCell implements Cell {
         if (s.startsWith("=")) {
             if (isValidFormula(s.substring(1))) {
                 setType(Ex2Utils.FORM);
-                setData(Ex2Sheet.eval(s));
+                setData(Ex2Sheet.eval(s.substring(1)));
             } else {
                 setData("ERR_FORM_FORMAT");
                 setType(Ex2Utils.ERR_FORM_FORMAT);
@@ -67,7 +67,7 @@ public class SCell implements Cell {
         }
 
         if (!opertorCheck(formula))
-            return false;
+             return false;
         // בדיקה בסיסית של תקינות הנוסחה
         // צריך להרחיב את זה בהמשך לבדיקה מקיפה יותר
         return formula.matches("[A-Z]\\d+|\\d+(\\.\\d+)?|[-+*/()\\d\\s]+");
@@ -87,10 +87,9 @@ public class SCell implements Cell {
         int i = 1;
         for (char c: expression.toCharArray()) {
 
-            if ((c!='+'||c!='-') && i<expression.length()&& expression.charAt(i) == '(') return false;
-            if ((c!='*'||c!='/')&&i<expression.length() && expression.charAt(i) == '(') return false;
-            if (c == ')' && (expression.charAt(i)!='*' || expression.charAt(i)!='/')) return false;
-            if (c == ')' && (expression.charAt(i)!='-' || expression.charAt(i)!='+')) return false;
+            if (i<expression.length() && (c!='+'||c!='-'||c!='*'||c!='/') &&  expression.charAt(i) == '(') return false;
+            if (i<expression.length() && c == ')' &&  expression.charAt(i)!='*' || expression.charAt(i)!='/' || expression.charAt(i)!='(') return false;
+            if (i<expression.length() && c == ')' && expression.charAt(i)!='-' || expression.charAt(i)!='+' || expression.charAt(i)!='(') return false;
             i++;
         }
         return true;
