@@ -86,10 +86,10 @@ public class SCell implements Cell {
     private static boolean opertorCheck(String expression){
         int i = 1;
         for (char c: expression.toCharArray()) {
-
-            if (i<expression.length() && (c!='+'||c!='-'||c!='*'||c!='/') &&  expression.charAt(i) == '(') return false;
-            if (i<expression.length() && c == ')' &&  expression.charAt(i)!='*' || expression.charAt(i)!='/' || expression.charAt(i)!='(') return false;
-            if (i<expression.length() && c == ')' && expression.charAt(i)!='-' || expression.charAt(i)!='+' || expression.charAt(i)!='(') return false;
+            if (i==expression.length()-1)return true;
+            char next = expression.charAt(i);
+            if (i<expression.length() && !(c=='+'||c=='-'||c=='*'||c=='/') &&  next == '(') return false;
+            if (i<expression.length() &&  !(next=='+'||next=='-'||next=='*'||next=='/') && c ==')') return false;
             i++;
         }
         return true;

@@ -114,77 +114,40 @@ public class Ex2Sheet implements Sheet {
     }
 
     public static String eval(String str) {
-        int ans = 0, arr = 0;
-        String nstr = null;
-        if(!str.contains("*")&&!str.contains("-")&&!str.contains("+")&&!str.contains("/"))
-            return str;
 
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-            int barCount = 0;
-
-            if (c == '(') barCount++;
-            if (c == ')') barCount--;
-
-            if (str.startsWith("(") && str.endsWith(")"))
-                return eval(str.substring(1, str.length() - 1));
-
-
-            if (barCount == 0) {
-                if (c == '+' || c == '-') {
-                    int left = Integer.parseInt(eval(str.substring(0, i)));
-                    int right = Integer.parseInt(eval(str.substring(i + 1)));
-                    return Integer.toString(c == '+' ? left + right : left - right);
-                }
-            }
-
+        if (str.contains("(")) {
+            int strt = 0, end;
+            strt = str.lastIndexOf('(');
+            end = str.indexOf(')', strt);
+            String inside = str.substring(strt, end);
+            str = str + eval(inside) + str.substring(end + 1);
+            return eval(str);
         }
 
-        for (int i = str.length() - 1; i >= 0; i--) {
-            char c = str.charAt(i);
-            int barCount = 0;
-
-            if (c == ')') barCount++;
-            if (c == '(') barCount--;
-
-            // אם אנחנו מחוץ לסוגריים, בודקים אופרטורים
-            if (barCount == 0) {
+        if (str.contains("*") || str.contains("/")) {
+            int opr = 0;
+            for (int i = 0; i < str.length() - 1; i++) {
+                char c = str.charAt(i);
                 if (c == '*' || c == '/') {
-                    int left = Integer.parseInt(eval(str.substring(0, i)));
-                    int right = Integer.parseInt(eval(str.substring(i + 1)));
-                    return Integer.toString(c == '*' ? left * right : left / right);
+                    String right = eval(str.substring(0, i));
+                    String left = eval(str.substring(i + 1));
+                    int result = c == '*' ? Integer.parseInt(left) * Integer.parseInt(right) :
+                            Integer.parseInt(left) / Integer.parseInt(right);
+                    return String.valueOf(result);
+                }
+
+            }
+            for (int i = 0; i < str.length(); i++) {
+                char c = str.charAt(i);
+                if (c == '+' || c == '-') {
+                    String left = eval(str.substring(0, i)); // מה שמשמאל לאופרטור
+                    String right = eval(str.substring(i + 1)); // מה שמימין לאופרטור
+                    int result = c == '+' ? Integer.parseInt(left) + Integer.parseInt(right) :
+                            Integer.parseInt(left) - Integer.parseInt(right);
+                    return String.valueOf(result); // החזרה כמחרוזת
                 }
             }
-
         }
-
-        if (str.matches("\\d+")) {
-            return str;
-        }
-
-
-//        for(int i=0; str.length()>=i; i++){
-//            int tempIndx = i+1;
-//            if (str.charAt(i)=='(') {
-//                while (str.charAt(i) != ')')
-//                    i++;
-//                nstr=str.substring(tempIndx,i);
-//                return calculate(str);
-//            }
-//
-//            if (str.charAt(i)=='*')
-//                nstr=Integer.toString(Integer.parseInt(str.substring(tempIndx,i))*calculate(str.substring(i+1)));
-//            if (str.charAt(i)=='-')
-//                nstr=Integer.toString(Integer.parseInt(str.substring(tempIndx,i))-calculate(str.substring(i+1)));
-//            if (str.charAt(i)=='+')
-//                nstr=Integer.toString(Integer.parseInt(str.substring(tempIndx,i))+calculate(str.substring(i+1)));
-//            if (str.charAt(i)=='/')
-//                nstr=Integer.toString(Integer.parseInt(str.substring(tempIndx,i))/calculate(str.substring(i+1)));
-//
-//        }
-//
-//        return Integer.parseInt(nstr);
-//    }
-        return null;
+        return str;
     }
 }
