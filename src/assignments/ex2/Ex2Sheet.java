@@ -114,40 +114,48 @@ public class Ex2Sheet implements Sheet {
     }
 
     public static String eval(String str) {
+        //  הסרת רווחים מיותרים
+        str = str.replaceAll("\\s+", "");
 
+        // טיפול בסוגריים
         if (str.contains("(")) {
-            int strt = 0, end;
-            strt = str.lastIndexOf('(');
-            end = str.indexOf(')', strt);
-            String inside = str.substring(strt, end);
-            str = str + eval(inside) + str.substring(end + 1);
-            return eval(str);
+            int openIndex = str.lastIndexOf('('); // סוגר פותח פנימי ביותר
+            int closeIndex = str.indexOf(')', openIndex); // סוגר סוגר תואם
+            String inside = str.substring(openIndex + 1, closeIndex); // מה שבתוך הסוגריים
+            String result = eval(inside); // חישוב תוכן הסוגריים
+            // הרכב מחדש את המחרוזת בלי הסוגריים
+            str = str.substring(0, openIndex) + result + str.substring(closeIndex + 1);
+            return eval(str); // המשך החישוב
         }
 
-        if (str.contains("*") || str.contains("/")) {
-            int opr = 0;
-            for (int i = 0; i < str.length() - 1; i++) {
-                char c = str.charAt(i);
-                if (c == '*' || c == '/') {
-                    String right = eval(str.substring(0, i));
-                    String left = eval(str.substring(i + 1));
-                    int result = c == '*' ? Integer.parseInt(left) * Integer.parseInt(right) :
-                            Integer.parseInt(left) / Integer.parseInt(right);
-                    return String.valueOf(result);
-                }
-
-            }
-            for (int i = 0; i < str.length(); i++) {
-                char c = str.charAt(i);
-                if (c == '+' || c == '-') {
-                    String left = eval(str.substring(0, i)); // מה שמשמאל לאופרטור
-                    String right = eval(str.substring(i + 1)); // מה שמימין לאופרטור
-                    int result = c == '+' ? Integer.parseInt(left) + Integer.parseInt(right) :
-                            Integer.parseInt(left) - Integer.parseInt(right);
-                    return String.valueOf(result); // החזרה כמחרוזת
-                }
+        //  טיפול באופרטורים: * ו-/
+        if (str.contains("*")||str.contains("/"))
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (c == '*' || c == '/') {
+                String left = eval(str.substring(0, i)); // מה שמשמאל לאופרטור
+                String right = eval(str.substring(i + 1)); // מה שמימין לאופרטור
+                int result = c == '*' ? Integer.parseInt(left) * Integer.parseInt(right) :
+                        Integer.parseInt(left) / Integer.parseInt(right);
+                return String.valueOf(result); // החזרה כמחרוזת
             }
         }
+
+        //  טיפול באופרטורים: + ו--
+        if (str.contains("-")||str.contains("+"))
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (c == '+' || c == '-') {
+                String left = eval(str.substring(0, i)); // מה שמשמאל לאופרטור
+                String right = eval(str.substring(i + 1)); // מה שמימין לאופרטור
+                int result = c == '+' ? Integer.parseInt(left) + Integer.parseInt(right) :
+                        Integer.parseInt(left) - Integer.parseInt(right);
+                return String.valueOf(result); // החזרה כמחרוזת
+            }
+        }
+
+        // 5. תנאי עצירה: אם זו ספרה בלבד
         return str;
     }
+
 }

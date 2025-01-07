@@ -12,6 +12,7 @@ public class SCell implements Cell {
 
 
     private String line;
+    private String data;
     private int type;
     private CellType CellType;
     private int order;
@@ -68,8 +69,7 @@ public class SCell implements Cell {
 
         if (!opertorCheck(formula))
              return false;
-        // בדיקה בסיסית של תקינות הנוסחה
-        // צריך להרחיב את זה בהמשך לבדיקה מקיפה יותר
+
         return formula.matches("[A-Z]\\d+|\\d+(\\.\\d+)?|[-+*/()\\d\\s]+");
     }
 
