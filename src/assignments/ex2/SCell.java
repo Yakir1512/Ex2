@@ -37,10 +37,10 @@ public class SCell implements Cell {
     public void setData(String s) {
         this.line = s;
 
+
         if (s.startsWith("=")) {
             if (isValidFormula(s.substring(1))) {
                 setType(Ex2Utils.FORM);
-                setData(Ex2Sheet.eval(s.substring(1)));
             } else {
                 setData("ERR_FORM_FORMAT");
                 setType(Ex2Utils.ERR_FORM_FORMAT);
@@ -68,7 +68,7 @@ public class SCell implements Cell {
         }
 
         if (!opertorCheck(formula))
-             return false;
+            return false;
 
         return formula.matches("[A-Z]\\d+|\\d+(\\.\\d+)?|[-+*/()\\d\\s]+");
     }
@@ -107,7 +107,7 @@ public class SCell implements Cell {
 
     @Override
     public String getData() {
-        return line;
+        return this.line;
     }
 
     @Override
@@ -117,7 +117,7 @@ public class SCell implements Cell {
 
     @Override
     public void setType(int t ) {
-       this.type = t;
+        this.type = t;
     }
 
     @Override

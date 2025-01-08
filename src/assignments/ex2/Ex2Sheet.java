@@ -82,7 +82,7 @@ public class Ex2Sheet implements Sheet {
     @Override
     public int[][] depth() {
         int[][] arr = new int[2] [2];
-            return arr ;
+        return arr ;
 
 
 
@@ -107,7 +107,7 @@ public class Ex2Sheet implements Sheet {
         String ans = null;
         if(get(x,y)!=null) {
             ans = get(x,y).toString();}
-        ans = eval(table[x][y].getData());
+        ans = table[x][y].getData();
 
         /////////////////////
         return ans;
@@ -130,29 +130,29 @@ public class Ex2Sheet implements Sheet {
 
         //  טיפול באופרטורים: * ו-/
         if (str.contains("*")||str.contains("/"))
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-            if (c == '*' || c == '/') {
-                String left = eval(str.substring(0, i)); // מה שמשמאל לאופרטור
-                String right = eval(str.substring(i + 1)); // מה שמימין לאופרטור
-                int result = c == '*' ? Integer.parseInt(left) * Integer.parseInt(right) :
-                        Integer.parseInt(left) / Integer.parseInt(right);
-                return String.valueOf(result); // החזרה כמחרוזת
+            for (int i = 0; i < str.length(); i++) {
+                char c = str.charAt(i);
+                if (c == '*' || c == '/') {
+                    String left = eval(str.substring(0, i)); // מה שמשמאל לאופרטור
+                    String right = eval(str.substring(i + 1)); // מה שמימין לאופרטור
+                    int result = c == '*' ? Integer.parseInt(left) * Integer.parseInt(right) :
+                            Integer.parseInt(left) / Integer.parseInt(right);
+                    return String.valueOf(result); // החזרה כמחרוזת
+                }
             }
-        }
 
         //  טיפול באופרטורים: + ו--
         if (str.contains("-")||str.contains("+"))
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-            if (c == '+' || c == '-') {
-                String left = eval(str.substring(0, i)); // מה שמשמאל לאופרטור
-                String right = eval(str.substring(i + 1)); // מה שמימין לאופרטור
-                int result = c == '+' ? Integer.parseInt(left) + Integer.parseInt(right) :
-                        Integer.parseInt(left) - Integer.parseInt(right);
-                return String.valueOf(result); // החזרה כמחרוזת
+            for (int i = 0; i < str.length(); i++) {
+                char c = str.charAt(i);
+                if (c == '+' || c == '-') {
+                    String left = eval(str.substring(0, i)); // מה שמשמאל לאופרטור
+                    String right = eval(str.substring(i + 1)); // מה שמימין לאופרטור
+                    int result = c == '+' ? Integer.parseInt(left) + Integer.parseInt(right) :
+                            Integer.parseInt(left) - Integer.parseInt(right);
+                    return String.valueOf(result); // החזרה כמחרוזת
+                }
             }
-        }
 
         // 5. תנאי עצירה: אם זו ספרה בלבד
         return str;
