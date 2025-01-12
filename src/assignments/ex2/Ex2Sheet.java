@@ -59,13 +59,14 @@ public class Ex2Sheet implements Sheet {
     public void set(int x, int y, String s) {
         Cell c = new SCell(s);
         table[x][y] = c;
+
     }
     @Override
     public void eval() {
-
         int[][] dd = depth();
 
-        //nna
+
+
 
     }
 
@@ -105,16 +106,13 @@ public class Ex2Sheet implements Sheet {
     @Override
     public String eval(int x, int y) {
         String ans = null;
-        if(get(x,y)!=null) {
-            ans = get(x,y).toString();}
-        ans = table[x][y].getData();
-
-        /////////////////////
+        ans=eval(table[x][y].getData());
         return ans;
+
     }
 
     public static String eval(String str) {
-        //  הסרת רווחים מיותרים
+        // הסרת רווחים מיותרים
         str = str.replaceAll("\\s+", "");
 
         // טיפול בסוגריים
@@ -128,34 +126,37 @@ public class Ex2Sheet implements Sheet {
             return eval(str); // המשך החישוב
         }
 
-        //  טיפול באופרטורים: * ו-/
-        if (str.contains("*")||str.contains("/"))
-            for (int i = 0; i < str.length(); i++) {
-                char c = str.charAt(i);
-                if (c == '*' || c == '/') {
-                    String left = eval(str.substring(0, i)); // מה שמשמאל לאופרטור
-                    String right = eval(str.substring(i + 1)); // מה שמימין לאופרטור
-                    int result = c == '*' ? Integer.parseInt(left) * Integer.parseInt(right) :
-                            Integer.parseInt(left) / Integer.parseInt(right);
-                    return String.valueOf(result); // החזרה כמחרוזת
-                }
+        // טיפול באופרטורים: * ו-/
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (c == '*' || c == '/') {
+                String left = eval(str.substring(0, i)); // מה שמשמאל לאופרטור
+                String right = eval(str.substring(i + 1)); // מה שמימין לאופרטור
+                double result = c == '*' ? Double.parseDouble(left) * Double.parseDouble(right) :
+                        Double.parseDouble(left) / Double.parseDouble(right);
+                return String.valueOf(result); // החזרה כמחרוזת
             }
+        }
 
-        //  טיפול באופרטורים: + ו--
-        if (str.contains("-")||str.contains("+"))
-            for (int i = 0; i < str.length(); i++) {
-                char c = str.charAt(i);
-                if (c == '+' || c == '-') {
-                    String left = eval(str.substring(0, i)); // מה שמשמאל לאופרטור
-                    String right = eval(str.substring(i + 1)); // מה שמימין לאופרטור
-                    int result = c == '+' ? Integer.parseInt(left) + Integer.parseInt(right) :
-                            Integer.parseInt(left) - Integer.parseInt(right);
-                    return String.valueOf(result); // החזרה כמחרוזת
-                }
+        // טיפול באופרטורים: + ו--
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if ((c == '+' || c == '-') && i != 0) { // מתעלמים ממינוס בהתחלה
+                String left = eval(str.substring(0, i)); // מה שמשמאל לאופרטור
+                String right = eval(str.substring(i + 1)); // מה שמימין לאופרטור
+                double result = c == '+' ? Double.parseDouble(left) + Double.parseDouble(right) :
+                        Double.parseDouble(left) - Double.parseDouble(right);
+                return String.valueOf(result); // החזרה כמחרוזת
             }
+        }
 
-        // 5. תנאי עצירה: אם זו ספרה בלבד
-        return str;
+        // תנאי עצירה: אם זו ספרה בלבד
+        if (str.matches("-?\\d+(\\.\\d+)?")) { // תומך במספרים שלמים ועשרוניים עם סימן מינוס אופציונלי
+            return str;
+        }
+
+        throw new IllegalArgumentException("Invalid expression: " + str);
     }
+
 
 }

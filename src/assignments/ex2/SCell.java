@@ -18,6 +18,7 @@ public class SCell implements Cell {
     private int order;
 
     public SCell(String s) {
+        this.line=s;
         setData(s);
     }
 
@@ -25,8 +26,13 @@ public class SCell implements Cell {
     public int getOrder() {
         return 0;
     }
+    public String getAns(){
+        return this.data;
+     }
+    public void setAns(String s){
+         this.data=s;
+    }
 
-    //@Override
     @Override
     public String toString() {
 
@@ -35,30 +41,39 @@ public class SCell implements Cell {
 
     @Override
     public void setData(String s) {
-        this.line = s;
+        classefing(s);
+           s=this.line;
 
 
+    }
+
+    public void classefing(String s){
         if (s.startsWith("=")) {
             if (isValidFormula(s.substring(1))) {
                 setType(Ex2Utils.FORM);
-            } else {
-                setData("ERR_FORM_FORMAT");
+              setAns(Ex2Sheet.eval(s.substring(1)));
+              this.line=Ex2Sheet.eval(s.substring(1));
+
+              //לחשב את הפונקציה
+              return;
+            }
+            else {
+                this.line="ERR_FORM_FORMAT";
                 setType(Ex2Utils.ERR_FORM_FORMAT);
             }
             return;
         }
         if (isNumber(s)) {
             setType(Ex2Utils.NUMBER);
+            setAns(this.line);
             return;
         }
-        if (s == null || s.trim().isEmpty()) {
-            setType(Ex2Utils.TEXT);
-            return;
-        }
+
         setType(Ex2Utils.TEXT);
     }
 
-    private boolean isValidFormula(String formula) {
+
+    static boolean isValidFormula(String formula) {
         if (formula == null || formula.trim().isEmpty()) {
             return false;
         }
@@ -75,6 +90,7 @@ public class SCell implements Cell {
 
     private static boolean checkBrackets(String expression) {
         int count = 0;
+        if ((expression.contains("(")||expression.contains(")")))
         for (char c : expression.toCharArray()) {
             if (c == '(') count++;
             if (c == ')') count--;
@@ -85,6 +101,7 @@ public class SCell implements Cell {
 
     private static boolean opertorCheck(String expression){
         int i = 1;
+        if (expression.contains("+")||expression.contains("-")||expression.contains("/")||expression.contains("/"))
         for (char c: expression.toCharArray()) {
             if (i==expression.length()-1)return true;
             char next = expression.charAt(i);
@@ -96,7 +113,7 @@ public class SCell implements Cell {
     }
 
 
-    private boolean isNumber(String str) {
+    static boolean isNumber(String str) {
         try {
             Double.parseDouble(str);
             return true;
@@ -105,6 +122,9 @@ public class SCell implements Cell {
         }
     }
 
+    public void SetAns(String s){
+        this.data=s;
+    }
     @Override
     public String getData() {
         return this.line;
@@ -116,7 +136,7 @@ public class SCell implements Cell {
     }
 
     @Override
-    public void setType(int t ) {
+    public  void setType(int t) {
         this.type = t;
     }
 

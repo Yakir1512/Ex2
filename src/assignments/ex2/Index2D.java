@@ -11,7 +11,7 @@ public interface Index2D {
      *
      * @return the cell index representation in form of a spreadsheet (e.g., "B3").
      */
-    public String toString();
+    public String toString(int x, int y);
 
     /**
      * checks of the string representation of this index is valid "XY" as X is a letter "A-Z" (or "a-z"), and Y is an integer [0-99].
