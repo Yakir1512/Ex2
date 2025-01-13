@@ -1,16 +1,31 @@
 package assignments.ex2;
 // Add your documentation below:
 
+
 public class CellEntry  implements Index2D {
+    private int x ,  y;
+    public  CellEntry(int x ,int y){
+        this.x = x;
+        this.y= y;
+    }
+    @Override
+    public String toString(){
+
+        if (x < 0 || y < 0) {
+            throw new IllegalArgumentException("Indices must be non-negative.");
+        }
+        char column = getLetterFromIndex(this.x); // המרת X לאות
+        return column + String.valueOf(this.y ); // צירוף האות והמספר (Y + 1)
+    }
 
     @Override
-    public String toString(int x, int y){
+    public  String toString(int x, int y){
 
             if (x < 0 || y < 0) {
                 throw new IllegalArgumentException("Indices must be non-negative.");
             }
             char column = getLetterFromIndex(x); // המרת X לאות
-            return column + String.valueOf(y + 1); // צירוף האות והמספר (Y + 1)
+            return column + String.valueOf(y ); // צירוף האות והמספר (Y + 1)
         }
 
     @Override
@@ -27,7 +42,7 @@ public class CellEntry  implements Index2D {
     @Override
     public int getY() {return Ex2Utils.ERR;}
 
-    public  char getLetterFromIndex(int index) {
+    public static char getLetterFromIndex(int index) {
         if (index < 0 || index > 25) {
             throw new IllegalArgumentException("Index must be between 0 and 25.");
         }

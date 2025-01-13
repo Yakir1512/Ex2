@@ -2,6 +2,8 @@ package assignments.ex2;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.LinkedList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Ex2Sheet implements Sheet {
@@ -126,6 +128,9 @@ public class Ex2Sheet implements Sheet {
             return eval(str); // המשך החישוב
         }
 
+        // זיהוי והחלפה של שמות תאים בערכם
+        str = replaceCellValues(str);
+
         // טיפול באופרטורים: * ו-/
         for (int i = 0; i < str.length(); i++) {
             char c = str.charAt(i);
@@ -158,5 +163,31 @@ public class Ex2Sheet implements Sheet {
         throw new IllegalArgumentException("Invalid expression: " + str);
     }
 
+    // פונקציה להחלפת שמות תאים בערכים שלהם
+    private static String replaceCellValues(String str) {
+        // יצירת תבנית לזיהוי תאים בפורמט אות+מספר (למשל: A2)
+        Pattern pattern = Pattern.compile("([A-Z])(\\d+)");
+        Matcher matcher = pattern.matcher(str);
+        StringBuffer result = new StringBuffer();
 
+        // מציאת תאים והחלפתם בערכים שלהם
+        while (matcher.find()) {
+            String column = matcher.group(1); // אות העמודה
+            int row = Integer.parseInt(matcher.group(2)); // מספר השורה
+            int x = row; // המספר מתאים לעמודה (ישיר)
+            int y = column.charAt(0) - 'A'; // המרה מאות לעמודה (A=0, B=1, וכו')
+            double cellValue = getCellValue(x, y); // קבלת ערך התא
+            matcher.appendReplacement(result, String.valueOf(cellValue)); // החלפה בערך התא
+        }
+
+        matcher.appendTail(result);
+        return result.toString();
+    }
+
+    // פונקציה לדוגמה לקבלת ערך התא
+    static double getCellValue(int x, int y) {
+        // כאן תוכל להחליף את המימוש לטבלת הנתונים שלך
+        if (x == 0 && y == 2) return 11; // לדוגמה: תא A2 הוא 11
+        return 0; // ערך ברירת מחדל
+    }
 }
