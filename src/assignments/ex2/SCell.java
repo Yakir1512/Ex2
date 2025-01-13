@@ -45,7 +45,7 @@ public class SCell implements Cell {
            s=this.line;
 
 
-    } 
+    }
 
     public void classefing(String s){
         if (s.startsWith("=")) {
